@@ -1,0 +1,513 @@
+\documentclass{article}
+\usepackage{amsmath,graphicx,setspace,fullpage,subfigure}
+\begin{document}
+\title{What is the Chemical Potential of a Transcription Factor?}
+\author{Patrick O'Neill}
+\maketitle{}
+\section{Introduction}
+
+\doublespacing Transcriptional regulation is the most ubiquitous and
+efficient mechanism for control of gene expression in biological
+systems.  Despite the prevalence and importance of this topic, many
+fundamental questions regarding the physiology and evolution of
+transcriptional regulatory systems remain open.  Although several
+specific systems have been studied in great detail
+(\textit{e.g.} \textit{lac},\textit{ara},$\lambda$)\cite{riggs70},\cite{hamilton88},\cite{ptashne67}
+within bacterial models, the overwhelming number of distinct
+transcription factors (TFs) present within a typical bacterial cell
+($\sim 200$) motivates the search for models of transcriptional
+regulation with general applicability.
+
+Models of TF-DNA interaction are broadly divided into two classes by
+their theoretical frameworks: probability and thermodynamics.
+Probabilistic models generally consider the genome as a mixture model
+with two components, one corresponding to the genomic background and
+the other corresponding to the set of functional binding sites.  Given
+a putative site, one may compute the log-odds ratio for the components
+of the mixtures and interpret the biological function of the site in
+relation to the probability of the site belonging to the binding site
+component.  Such models usually suffer from a high number of false
+positives\cite{erill09}.  In the thermodynamic approach, one models
+the TF as a function from nucleotide sequences to free energies of
+binding.  Good functions are those which separate true sites from the
+genomic background, assigning lower free energies of binding to the
+former; in practice, the energy function is assumed to be
+well-approximated by a weight matrix parametrized by collections of
+experimentally verified sites.  Given the binding energies for every
+potential binding site in the genome, the expected occupancies
+(i.e. probability that the site is bound) can be approximated to first
+order by a Boltzmann distribution, or by Fermi-Dirac statistics if TF
+copy number is to be taken into account \cite{gerland02}.
+
+In this study, we propose to address two common assumptions made in
+most existing models of TF-DNA interaction.  The first assumption that
+the copy number is small, in a sense that will be clarified below.
+The second assumption is that the genomic background is
+well-approximated by a mononucleotide model.  Both assumptions were
+originally granted for the purposes of analytical tractability, but in
+an era of ubiquitous sequence data and cheap computing power it has
+become possible to re-examine these simplifications and compare their
+theoretical entailments to the available data.
+
+\section{Binding Energy Model}
+\subsection{Overview}
+We consider the case of $k$ TF copies binding to a circular chromosome
+of length $G$ containing $G$ distinct (but potentially overlapping)
+possible binding sites where site $s_i$ has a given free energy
+$\epsilon_i $ associated with the binding event.  At any time, each
+site may be either \textit{bound} or \textit{unbound} by a TF copy.
+Sites may be bound in either of the \textit{specific} or
+\textit{non-specific} modes.  We assume that there is a single, global
+value of free energy $\epsilon_{ns}$ associated with non-specific
+binding to any site.
+
+% , driven respectively by hydrogen bonding
+% between specific nucleotides of the site and amino acid residues of
+% the DNA-binding domain of the protein, and generic electrostatic
+% interactions.
+
+We further assume that steric exclusion prevents more than one copy
+from binding to a given site simultaneously.  Since each site is
+offset by one nucleotide from the site preceding it, it is possible
+that a protein bound to a given site will interfere with other copies
+binding at neighboring sites.  So long as sites with high
+probabilities of occupancy are not extremely co-localized in the
+chromosome, however, interference between neighboring sites can be
+neglected.  We therefore assume that the binding state of one site
+does not affect the occupancy of any other state, either through
+steric exclusion or cooperative binding.
+
+
+\subsection{Inference of binding energies from sequence data}
+In general, tolerably accurate estimations of the collection of
+binding energies $\vec{\epsilon}$ can be read off of the sequence
+data, and we will consider them as given throughout.  We use the TRAP
+model \cite{roider07}, which proposes the relation:
+
+\begin{equation}
+  \label{eq:trap_init}
+  p(s) = \frac{R_0e^{-\beta E(s)}}{1 + R_0e^{-\beta E(s)}},
+\end{equation}
+
+where
+\begin{equation}
+  \label{eq:trap}
+  \beta E(s) = \frac{1}{\lambda} \mathrm{HI}(s),
+\end{equation}
+
+ $\mathrm{HI}(s)$ is the Heterology Index:
+
+\begin{equation}
+  \label{eq:bvh}
+  \mathrm{HI}(s) = \displaystyle\sum_{i=1}^W\ln(\frac{n_{i,\max}+1}{n_{i}+1})
+\end{equation}
+as defined in \cite{berg87}.  (In \cite{roider07} the BvH
+function is modified slightly to incorporate a correction for
+background mononucleotide frequencies.  Since the mononucleotide
+frequencies in \textit{Escherichia coli} are essentially uniform, we
+neglect that term here.)  The TRAP scoring function is parametrized by
+$\lambda$, the mismatch scaling parameter, and $R_0 = K(s_0)[TF]$ for
+$K(s_0)$ the association constant of the consensus sequence $s_0$.
+
+Equation \ref{eq:trap_init} can be written as:
+
+\begin{equation}
+\label{eq:bindingprob}
+  P(s) = \frac{1}{1+e^{-\beta(E(s) - \frac{\ln(R_0)}{\beta})}}
+\end{equation}
+
+so that we can interpret:
+
+\begin{equation}
+  \label{eq:bindingenergy}
+  \epsilon(s) \equiv (E(s) - \frac{\ln(R_0)}{\beta}) = \frac{\frac{1}{\lambda}\mathrm{HI(s)} - \ln R_0}{\beta}
+\end{equation}
+
+directly as a free energy of binding in units of $k_BT$.  The parameter values $(\lambda = .7, \ln R_0 = 0.585 w - 5.66)$ for $w$ the width of the binding site were estimated from empirical data in \cite{manke08}.
+
+\subsection{Strandedness and Non-specific binding}
+
+Two secondary issues slightly complicate the modeling of a TF binding
+event: the fact that chromosomal DNA is double-stranded and the fact
+that TFs may bind either specifically or non-specifically.
+
+\subsubsection{Strandedness}
+Double-stranded DNA may be bound by a TF in either of two
+orientations, which we will refer to as the \textit{forward} and
+\textit{backward} orientations.  Since binding in the two orientations
+is mutually exclusive and jointly exhaustive given the binding event,
+we may write the occupancy of the site as:
+\begin{equation}
+P(s) = P(s_f) + P(s_b)
+\end{equation}
+where $s_f$ and $s_b$ represent the binding event in the forward and backward orientations, respectively.  After substitution with Eq. \ref{eq:bindingprob}, we obtain:
+$$e^{-\beta \epsilon_s} = e^{-\beta \epsilon_f} + e^{-\beta \epsilon_b}$$
+where $\epsilon_f$ and $\epsilon_b$ are the free energies of binding in
+each orientation.  This yields the specific free energy
+$\epsilon_s$ which summarizes the specific binding in both strands:
+
+\begin{equation}
+\label{eq:doublestrandedbinding}
+\epsilon_s = \frac{-\ln(e^{-\beta \epsilon_f} + e^{-\beta \epsilon_b})}{\beta}.
+\end{equation}
+
+If the binding site is asymmetric, then the contribution from one
+orientation (say, $\epsilon_f)$ will predominate since $\epsilon_f \ll
+\epsilon_b$, and so $\epsilon_s \approx epsilon_f$.  If the binding
+site is symmetric, however, then we will have $\epsilon_f \approx
+\epsilon_b$, and $\epsilon_s \approx \epsilon_f - \frac{\ln
+  2}{\beta}$.  Intriguingly, subtracted term is precisely Landauer's
+limit, the minimum amount of energy required to erase one bit of
+information.  \cite{landauer61} It is suggestive to interpret this
+difference as the gain in free energy obtained by neglecting to track
+the distinction between binding in the forward or reverse
+orientations, as is physiologically reasonable for the homomultimeric
+proteins which constitute the majority of prokaryotic transcription
+factors.  Throughout, we will consider the free energy of specific
+binding to a given site to be determined by
+Eq. \ref{eq:doublestrandedbinding}, where $\epsilon_f$ is computed via
+Eq. \ref{eq:bindingenergy} for the site in 5'-3' orientation and
+$\epsilon_b$ for its reverse complement.
+
+\subsubsection{Non-specific binding}
+TFs bind DNA in specific and non-specific modes.  The existence of
+non-specific binding was predicted from theoretical considerations
+\cite{kaohuang77} and verified in many systems through a variety of
+experimental techniques \cite{revzin90}.  Given various estimates of
+non-specific binding of $-7\frac{\mathrm{kcal}}{\textrm{mol}}$ for Lac
+repressor \cite{wang77}, $-5.7\frac{\mathrm{kcal}}{\textrm{mol}}$ for
+MetJ \cite{augustus10}, and $-5$ to $-7
+\frac{\mathrm{kcal}}{\textrm{mol}}$ for CRP \cite{takahashi79},
+$-4\frac{\mathrm{kcal}}{\textrm{mol}}$ and $-4.2
+\frac{\mathrm{kcal}}{\textrm{mol}}$ respectively for $\lambda$ cI and
+Cro \cite{bakk2004}, a global value $\epsilon_{ns}$ on the order of
+$-5\frac{\mathrm{kcal}}{\textrm{mol}}\approx -8 k_BT$ at physiological
+temperatures is assumed hereafter.
+
+The total free energy of binding for a site is then given by:
+\begin{equation}
+  \epsilon = \frac{-\ln(e^{-\beta \epsilon_s} + e^{-\beta \epsilon_{ns}})}{\beta}.\label{eq:totalbindingenergy}
+\end{equation}
+
+  The total energy $\epsilon$ is essentially linear in $\epsilon_s$ for $\epsilon_s < \epsilon_{ns}$, and assumes the value $\epsilon_{ns}$ otherwise, in agreement with free energy profiles reported in \cite{maerkl2007}.
+
+A final complication arises from the fact that $\epsilon_{ns}$ is
+given in absolute terms, whereas values of $\epsilon_s$ are scaled so
+that the specific binding energy for the consensus sequence
+$\epsilon_s(s_0)$ is defined to be 0.  To reconcile the two scales, we
+assume that the contribution of the specific binding is on the order
+of $2k_BT w$, an optimal search criterion derived from first
+principles \cite{gerland02} and essentially in agreement with
+experimental data.  \cite{bakk2004}.
+\section{Site Occupancy Model}
+For each site we will have a reaction of the form:
+\begin{equation}
+  \label{eq:s_reaction}
+  S_i + TF \overset{k^+_i}{\underset{k^-_i}{\rightleftharpoons}} C_i,
+\end{equation}
+\textit{i.e.} the $i$th site and a TF can enter into a reversible
+complex at a site-specific rate.  Although binding energies are
+usually reported in terms of $\Delta G$, it is often more convenient
+to work with dissociation constants.  From the familiar Arrhenius law:
+
+\begin{equation}\label{eq:kd}
+  \frac{k^-_i}{k^+_i} = K_{di} = e^{\frac{\Delta G_i}{k_BT}}
+\end{equation}
+we may write down a system of differential equations:
+
+\begin{equation}
+  \label{eq:s_diff}
+  \frac{1}{k_i^+}\frac{ds_i}{dt} = (1-s_i)p - K_{di}s_i
+\end{equation}
+where $s_i$ is the probability of occupancy of the $i$th site, and $p$
+is the concentration of free protein.
+
+At equilibrium ($\frac{ds_i}{dt} = 0$), we may solve for $s_i$ as a
+function of free protein:
+\begin{equation}
+  \label{eq:s_equilibrium}
+  s_i = \frac{p}{p + K_{di}}.
+\end{equation}
+The quantity of free protein, however, is not as easily determined.
+There appears to be no alternative to solving the following equation:
+\begin{equation}
+  \label{eq:p_numeric}
+  \overset{total\ protein}{\overbrace{k}} = \overset{bound\ protein}{\overbrace{\displaystyle\sum_i\frac{p}{p + K_{di}}}} + \overset{free\ protein}{\overbrace{p}}
+\end{equation}
+numerically.  Nevertheless, $p$ can be obtained quickly via standard
+root-finding methods.
+
+Lastly, Eq.\ref{eq:s_equilibrium} can be re-written using
+Eq. \ref{eq:kd} and the identity $p = e^{\ln p}$, ultimately yielding:
+\begin{equation}
+  \label{eq:s_fd}
+  s_i = \frac{1}{1 + e^{\frac{\Delta G}{k_BT}  - \ln p}},
+\end{equation}
+which takes the form of the Fermi-Dirac distribution:
+\begin{equation}
+  \label{eq:s_fd}
+  s_i = \frac{1}{1 + e^{\beta(\epsilon_i - \mu)}},
+\end{equation}
+where $\beta = \frac{1}{k_BT}$ is inverse temperature and $\mu$ is the
+chemical potential.  This suggests the identity:
+
+\begin{equation}
+  \label{eq:mu_lnp}
+  \mu = k_BT \ln p
+\end{equation}
+
+Equation \ref{eq:mu_lnp} is
+especially interesting because it disagrees slightly with the
+established approximation
+\begin{equation}
+  \label{eq:mu_approx}
+  \hat{\mu} \approx k_BT (\ln k - \ln Z),
+\end{equation}
+given for example in \cite{gerland02} and (slightly modified) in
+\cite{zhao09},where $Z=\sum_ie^{-\beta\epsilon_i}$ is the partition
+function.  This discrepancy is revealing: the literature states that
+$\mu$ should depend upon the total protein $k$, whereas we predict
+that it should depend only upon the \textit{free} protein $p$.  This
+invites us to consider the relationship between $k$ and $p$, which by
+Eqs. (\ref{eq:mu_lnp},\ref{eq:mu_approx}) should be:
+
+\begin{equation}
+  \label{eq:p_vs_k}
+  p \approx \frac{k}{Z}.
+\end{equation}
+
+\begin{equation}
+  \frac{\partial\hat\mu}{\partial k}\propto \frac{\partial\ln k}{\partial k} = \frac{1}{k} < \frac{1}{p}
+\end{equation}
+Clearly, the approximation given in Eq. (\ref{eq:p_vs_k}) cannot
+always hold.  For example, in the saturated limit $k\gg G$ we should
+have $\frac{dp}{dk}\approx 1$: an additional protein will not bind at
+all, having no free sites to bind to, and should contribute almost
+entirely to the quantity of unbound protein. This limiting case
+contradicts the approximation, which predicts $\frac{dp}{dk}\approx
+\frac{1}{Z}$.  The relevance of this discrepancy will depend on the
+behavior of the model in the physiologically realistic ``meso-copy''
+regime, roughly $10^1 < k < 10^3$ \cite{ishihama08}.  In the next section we explore the
+model's behavior for various copy numbers and genomic background
+settings.
+
+\section{Data and Methods}
+Experiments concerning \textit{E. coli} TFs were conducted on the
+\textit{Escherichia coli} K12 MG1655 genome \cite{blattner97} or on
+randomized control genomes of equivalent length with uniform base
+probabilities.  Binding energy matrices were derived via the TRAP
+binding model \cite{roider07} from every \textit{E. coli}
+transcription factor in the PRODORIC database \cite{prodoric03}
+(release 8.9) having ten or more experimentally verified sites.
+
+Analysis of the Chip-Seq experiment performed in \cite{smollett12} was
+conducted with the \textit{Mycobacterium tuberculosis} H37Rv genome.
+Since the model used in \cite{smollett12} was strain 1424, derived
+from H37Rv, we checked whether the reported sites were conserved in
+strain H37Rv.  All sites were conserved except Site 1; we therefore
+analyzed a synthetic genome derived from the H37Rv genome by replacing
+the strongest LexA site in the corresponding binding region with Site
+1.
+
+All genomic data was obtained from NCBI via FTP.
+
+All code was implemented in Python and is available at
+\texttt{github.com/poneill/chemical\_potential}.  In particular, the
+relationship between copy number and chemical potential for a given
+genomic binding energy landscape was determined by summing
+\cite{eq:s_fd} over all $\epsilon_i$ for a given value of $\mu$, which
+requires approximately four seconds of wall-clock time on a moderately
+endowed desktop computer.  To compute the value of $\mu$ corresponding
+to a given $k$, the previous technique generalizes to a bisection
+algorithm.
+
+\section{Results and Discussion}
+\subsection{$\mu-k$ diagrams}
+We are interested to know how well the prevailing approximation in the
+literature, given in Eq. \ref{eq:mu_approx}, agrees with the exact
+solution.  In Figure \ref{fig:LexA_mu_vs_k}, the chemical potential is
+computed both exactly and approximately as a function of copy number,
+using both the \textit{E. coli} genome and a random control genome of
+equivalent length and mononucleotide frequencies.  Several points
+deserve mention.  Firstly, although we witness good agreement between
+$\mu$ and $\hat\mu$ in the limit of low copy number on both the real
+and synthetic genomes, the curves diverge as copy number increases.
+Moreover, $\mu$ increases more rapidly than $\hat\mu$, in agreement
+with the phenomenological remark made earlier about
+Eq. \ref{eq:p_vs_k}: since $\mu$ is related to $p$ by Eq.
+\ref{eq:mu_lnp}, we can verify the slope of the $\mu$ vs. $\log k$
+curve to be approximately 1 for large $k$ (rather than $\frac{1}{Z}$
+for $\hat\mu$).  Lastly, it is evident that for low copy number, the
+chemical potential of the \textit{E. coli} genome is much lower than
+that of a random control, regardless of the method of solution.  This
+discrepancy is attributable to the enrichment of strong binding sites
+in the \textit{E. coli} genome which trap TF copies, lowering its
+effective concentration.  As copy number grows large, however, the
+strong binding sites become saturated and the chemical potential curve
+becomes indistinguishable from that of the control genome.  This
+result is in agreement with the well-known finding that
+\textit{E. coli} binding energy distribution for a given TF is only
+distinguishable from a random nucleotide model in its
+over-representation of strong sites\cite{gerland02}\cite{lassig07}; we
+find it striking that the cell regulates TF concentration at
+approximately the copy number at which the chemical potential becomes
+indistinguishable from that of a random control.  The curves for
+$\hat\mu$ on the real and control genomes, on the other hand, differ
+only in their values of the partition function and therefore cannot
+capture this effect.  These results are not specific to LexA: they can
+be shown in a variety of transcription factors of \textit{E. coli}, as
+evidenced in Fig. \ref{fig:mu_vs_k_examples}.
+
+Approximation of the chemical potential can lead to considerable
+divergence from the exact solution in the range of biologically
+plausible copy numbers.  How significant is an approximation error of
+on the order of $\sim 5k_BT$, as in the case of LexA?
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.8]{../final_pngs/LexA_final_graph_no_2.png}
+  \caption{Chemical potential for LexA as a function of copy number.
+    The exact solution ($\mu$) is compared to the approximation($\hat\mu$) on both the
+    \textit{E. coli} genome and a random control genome.}
+  \label{fig:LexA_mu_vs_k}
+\end{figure}
+
+
+
+\begin{figure}[ht]
+  \centering
+  \subfigure{\includegraphics[scale=0.3]{../final_pngs/Crp_final_graph_no_2.png}}
+  \subfigure{\includegraphics[scale=0.3]{../final_pngs/FliA_final_graph_no_2.png}}
+  \subfigure{\includegraphics[scale=0.3]{../final_pngs/Fur_final_graph_no_2.png}}
+  \subfigure{\includegraphics[scale=0.3]{../final_pngs/OxyR_final_graph_no_2.png}}
+  \caption{$\mu$-$k$ diagrams for a variety of \textit{E. coli} TFs}
+  \label{fig:mu_vs_k_examples}
+\end{figure}
+
+\subsection{Regulon Occupancy Predictions}
+In this section we compute the equilibrium occupancy of a TF's
+reported binding sites given $\mu(k)$ and $\hat\mu(k)$, assuming ten
+copies of the TF for each true binding site.
+
+  \begin{figure}[ht]
+    \centering
+    \includegraphics{../final_pngs/LexA_approximate_vs_exact_unannotated.png}
+    \caption{Binding probabilities for LexA binding sites given exact solution ($\mu$) and approximate solution ($\hat\mu$)}
+    \label{fig:LexA_site_killing_exp}
+  \end{figure}
+
+  In Fig. \ref{fig:LexA_site_killing_exp}, we observe that use of the
+  approximated chemical potential leads to significant underestimation
+  of binding probabilities, with many binding sites predicted bound
+  only under the exact chemical potential.  Although
+  Fig. \ref{fig:LexA_site_killing_exp} compares $\mu$ and $\hat\mu$ at
+  a single, physiologically plausible copy number, it is also
+  instructive to consider how the total probability mass assigned to
+  the verified binding sites varies with copy number, allowing us to
+  compare $\mu$ and $\hat\mu$ at all concentrations simultaneously and
+  determine the concentration at which the collection becomes saturated.
+
+  % If $mu(k)$ and $\hat\mu(k)$ yield equivalent predictions, then the
+  % data in the binding site plot will conform to the straight line
+  % $P(s|\mu(k)) = P(s|\hat\mu(k))$.  Judging from Fig.
+  % \ref{fig:LexA_site_killing_exp}, however, the use of $\hat\mu$ leads
+  % to significant under-estimation of binding.  Indeed, many points
+  % occupy the lower-right corner of the plot, denoting a bound
+  % probability $\sim 1$ according to the exact method, but $\sim 0$
+  % according to the approximation.  (The site occupying the bottom-left
+  % corner belongs to the \textit{rpsU-dnaG-rpoD} regulon.)
+
+
+  % In the last section it was shown that $\hat\mu$ can lead to
+  % significant underestimations of the occupancies of true binding
+  % sites.  
+
+  % In this section we consider the relationship between copy number and
+  % total occupancy, summed over the collection of binding sites.  
+
+  This relationship is visualized in Fig.
+  \ref{fig:occupancy_vs_copy_number}.  Two related points are
+  immediately evident.  Firstly, the binding response is more
+  sensitive to change in copy number when the chemical potential is
+  computed exactly.  Relatedly, the idealized chemical potential
+  predicts that the collection of functional binding sites will not
+  saturate until copy number is far in excess of physiological values;
+  the LexA repressor is not predicted to fully occupy its known sites
+  until copy number exceeds $10^6$.  Additional examples are provided
+  in Fig. \ref{fig:occupancy_vs_copy_number_examples}, illustrating
+  the same effect.
+
+  \begin{figure}[ht]
+    \centering
+    \includegraphics{../final_pngs/LexA_how_many_copies.png}
+    \caption{Aggregate binding site occupancy as a function of copy number}
+    \label{fig:occupancy_vs_copy_number}
+  \end{figure}
+
+  \begin{figure}[ht]
+  \centering
+  \subfigure{\includegraphics[scale=0.3]{../final_pngs/Crp_how_many_copies.png}}
+  \subfigure{\includegraphics[scale=0.3]{../final_pngs/FliA_how_many_copies.png}}
+  \subfigure{\includegraphics[scale=0.3]{../final_pngs/Fur_how_many_copies.png}}
+  \subfigure{\includegraphics[scale=0.3]{../final_pngs/OxyR_how_many_copies.png}}
+  \caption{$\mu$-$k$ diagrams for a variety of \textit{E. coli} TFs}
+  \label{fig:occupancy_vs_copy_number_examples}
+\end{figure}
+
+\subsection{Comparison with Chip-chip data}
+Finally, we compare the occupancy predictions of the exact and
+idealized chemical potential against a \textit{Mycobacterium
+  tuberculosis} LexA experiment performed by Smollett \textit{et al.}
+\cite{smollett12} Average peak intensities for 25 reported binding
+sites were compared to predicted occupancy for $\mu$ and $\hat\mu$ and
+Pearson correlation coefficients were computed at various copy
+numbers.
+
+Results are shown in Fig. \ref{fig:smollett_chip_seq}.  When the
+chemical potential is computed exactly, correlation is maximized for
+copy number in the physiological range, whereas use of the
+approximated chemical potential leads to predictions which lag by more
+than two orders of magnitude.  The correlation peak also is much
+sharper given the exact solution, in accordance with the previous
+result.
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.8]{../final_pngs/smollett_chip_seq.png}
+  \caption{Correlation of LexA Chip-Seq binding intensities with occupancy predictions for exact and approximated chemical potentials}
+  \label{fig:smollett_chip_seq}
+\end{figure}
+
+\subsection{Summary}
+The use of the ideal gas approximation for the computation of the
+chemical potential of a transcription factor can lead to erroneous
+conclusions.  Firstly, it obscures a qualitative behavior exhibited by
+the binding distributions of real genomes but lacked by those of
+randomized controls: stronger-than-expected functional sites create
+energy wells which, once saturated, lead to sharp increases in the
+chemical potential as a function of copy number.  In other words, the
+exact chemical potentials of real and synthetic genomes become
+indistinguishable in the limit of large copy number, whereas the
+approximate chemical potentials remain distinct.  Secondly, use of the
+approximate chemical potential can lead to significant
+under-prediction of binding to functional sites; as much as 70\% of
+the binding sites of several regulons were predicted unbound even when
+copy number exceeded site number by an order of magnitude.  Thirdly,
+the approximated chemical potential not only predicts less binding,
+but a slower functional response to the marginal increase in copy
+number.  This effect, observed recently in the context of Hill
+coefficients of individual sites \cite{sheinman12}, generalizes to the
+regulon as a whole as evidenced in
+Figs. \label{fig:occupancy_vs_copy_number}
+and \label{fig:occupancy_vs_copy_number_examples}.  Lastly, comparison
+of the model to available Chip-Seq data shows qualitatively better
+agreement with an exact rather than approximated value.
+
+
+
+ \newpage
+\bibliography{/home/poneill/Dropbox/bibliography}{}
+\bibliographystyle{abbrv} \newpage
+\end{document}
