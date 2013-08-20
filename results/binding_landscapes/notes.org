@@ -1,0 +1,1 @@
+This directory contains binding landscapes for each TF represented as Python arrays.
