@@ -1,0 +1,11 @@
+The paper contains the following figures:
+
+ - mu-k diagrams
+
+ - mu-mu_hat BS probability diagrams
+
+ - k-occupancy diagrams
+
+ - Smollett experiment correlation diagrams
+
+each of which should get its own folder.
