@@ -1,11 +1,8 @@
-#There is a linear relationship between score and log(probability)
-#Intercept depends on TF copy number; slope on temp 
 import sys
 #pypy imports
 at_lab = True
 sys.path.append("/home/poneill/python_utils")
 sys.path.append("/home/poneill/motifs")
-sys.path.append("/home/poneill/sufficache")
 from utils import *
 from motifs import *
 #import numpypy as np
