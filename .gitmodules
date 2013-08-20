@@ -4,3 +4,6 @@
 [submodule "pub/paper/bib"]
 	path = pub/paper/bib
 	url = git@github.com:poneill/bib.git
+[submodule "data/motifs"]
+	path = data/motifs
+	url = git://github.com/poneill/motifs.git
