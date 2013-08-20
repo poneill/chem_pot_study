@@ -7,3 +7,6 @@
 [submodule "data/motifs"]
 	path = data/motifs
 	url = git://github.com/poneill/motifs.git
+[submodule "src/sufficache"]
+	path = src/sufficache
+	url = git://github.com/poneill/sufficache.git
