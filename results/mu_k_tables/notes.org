@@ -1,0 +1,1 @@
+This directory contains csvs relating the chemical potential to copy number
