@@ -14,7 +14,7 @@ data/NC_000913.fna:
 
 # nomenclature: tf_{genome|control}_{exact|approximation}
 
-results/binding_landscapes/%_genome_binding_landscape.dat: src/generate_binding_landscapes.py
+results/binding_landscapes/%_genome_binding_landscape.dat: src/generate_binding_landscapes.py data/NC_000913.fna
 	echo using: $(PP) for fast numerics
 	$(PP) src/generate_binding_landscapes.py $* genome
 
