@@ -6,6 +6,10 @@
 
 PP = $(shell which pypy || which python)
 
+git: 
+	git submodule init
+	git submodule update
+
 pub/paper/paper.pdf: pub/paper/chem_pot_paper.tex pub/paper/bib/
 	pdflatex pub/paper/chem_pot_paper.tex pub/paper/chem_pot_paper.pdf
 
@@ -53,37 +57,3 @@ results/fig/misclassification_rates.png: src/generate_misclassification_plot.py 
 	echo $^
 	echo $(all_exact_mu_k_tables)
 	python src/generate_misclassification_plot.py results/fig/misclassification_rates.png
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
