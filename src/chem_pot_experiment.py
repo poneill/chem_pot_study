@@ -19,15 +19,7 @@ if not sys.executable == "/usr/local/bin/pypy":
     """Load these imports only if not using pypy"""
     from scipy.optimize import fmin
     from matplotlib import pyplot as plt
-#from chem_pot_data import *
-#from mpmath import mpf,exp
-#kB = 1.3806503*10**-23
-kB  = 0.0019872041 #kcal/mol (!)
-temp_C = 37
-C2K = 273.15
-temp = temp_C + C2K 
-beta = 1/(kB*temp) 
-R = 1.9858775*10**-3#ideal gas constant
+
 mus = range(-5,50)
 
 def pairs(xs):
@@ -178,6 +170,7 @@ def compute_b(mu,beta):
 
 def fermi_dirac(e,mu,beta=beta):
     return 1/(exp((e-mu)*beta) + 1)
+
 def bisect(f,mu_lo,mu_hi,beta=beta,mu_tolerance=1e-2,last_mu_diff=None,verbose=False):
     """find x such that f(x) == 0, x in [lo,high]"""
     current_mu_diff = mu_hi - mu_lo
@@ -941,16 +934,6 @@ def site_killing_exp(motif,motif_name,energies=None,copy_number=None,mu=None):
         plt.close()
     return probs,approx_probs
 
-def load_array(filename,typ):
-    n = 5000000 # shitty hard-coded constants
-    arr = array(typ)
-    with open(filename) as f:
-        try:
-            arr.fromfile(f,n)
-        except:
-            pass
-    return list(arr)
-
 ks = [random.gauss(0,1) + 10 for i in range(10)]
 f = lambda p:sum(p/float(p+k) for k in ks)
 
@@ -1281,5 +1264,4 @@ def last_gibbs_exp(epsilons,k):
 def site_probs_from_history(history,num_sites):
     return [sum(i in state for state in history)/float(len(history))
             for i in range(num_sites)]
-        
         
