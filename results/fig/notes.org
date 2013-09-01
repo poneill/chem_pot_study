@@ -9,3 +9,6 @@ The paper contains the following figures:
  - Smollett experiment correlation diagrams
 
 each of which should get its own folder.
+
+Note on the nomenclature: 'fig' is shorter than 'diagram', and should
+be used throughout.
