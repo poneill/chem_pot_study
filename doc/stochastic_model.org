@@ -1,0 +1,5 @@
+* Overview
+  These notes accompany stochastic_model.org
+* Where is discrepancy between det, stoch predictions greatest?
+* How can predict_stochastic be optimized?
+  Currently can't handle 20 states, 10 copies-- unacceptable.
