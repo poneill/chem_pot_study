@@ -15,6 +15,8 @@ from itertools import combinations
 from collections import Counter,defaultdict
 from copy_dict import copy_dict,ns_copy_dict
 from copy_numbers import copy_numbers
+from params import *
+
 if not sys.executable == "/usr/local/bin/pypy":
     """Load these imports only if not using pypy"""
     from scipy.optimize import fmin

@@ -29,17 +29,40 @@ a putative site, one may compute the log-odds ratio for the components
 of the mixtures and interpret the biological function of the site in
 relation to the probability of the site belonging to the binding site
 component.  Such models usually suffer from a high number of false
-positives\cite{erill09}.  In the thermodynamic approach, one models
+positives \cite{erill09}.  In the thermodynamic approach, one models
 the TF as a function from nucleotide sequences to free energies of
-binding.  Good functions are those which separate true sites from the
-genomic background, assigning lower free energies of binding to the
-former; in practice, the energy function is assumed to be
+binding.  ``Good'' functions are those which separate true sites from
+the genomic background, assigning lower free energies of binding to
+the former; in practice, the energy function is assumed to be
 well-approximated by a weight matrix parametrized by collections of
 experimentally verified sites.  Given the binding energies for every
 potential binding site in the genome, the expected occupancies
 (i.e. probability that the site is bound) can be approximated to first
 order by a Boltzmann distribution, or by Fermi-Dirac statistics if TF
 copy number is to be taken into account \cite{gerland02}.
+
+The Fermi-Dirac distribution describes the occupancy probability $s_i$
+of the $i$th site in terms of the free energy $\epsilon_i$ of the site
+and two parameters, $\beta$ and $\mu$:
+
+\begin{equation}
+  \label{eq:s_fd}
+  s_i = \frac{1}{1 + e^{\beta(\epsilon_i - \mu)}}.
+\end{equation}
+
+While the parameter $\beta$ corresponds directly to inverse
+temperature, the parameter $\mu$ is a function of both the copy number
+of the TF and the free energies of binding for every site in the
+system.  Typically, it is approximated by the chemical potential for an ideal gas:
+\begin{equation}
+  \label{eq:mu_approx}
+  \hat{\mu} \approx k_BT (\ln k - \ln Z),
+\end{equation}
+given for example in \cite{gerland02} and (slightly modified) in
+\cite{zhao09},where $Z=\sum_ie^{-\beta\epsilon_i}$ is the partition
+function.  (Throughout, we will use $\hat\mu$ to refer to the ideal
+gas approximation of a system's chemical potential, and reserve $\mu$
+for exact chemical potentials).
 
 In this study, we propose to address two common assumptions made in
 most existing models of TF-DNA interaction.  The first assumption that
@@ -257,20 +280,13 @@ chemical potential.  This suggests the identity:
   \mu = k_BT \ln p
 \end{equation}
 
-Equation \ref{eq:mu_lnp} is
-especially interesting because it disagrees slightly with the
-established approximation
-\begin{equation}
-  \label{eq:mu_approx}
-  \hat{\mu} \approx k_BT (\ln k - \ln Z),
-\end{equation}
-given for example in \cite{gerland02} and (slightly modified) in
-\cite{zhao09},where $Z=\sum_ie^{-\beta\epsilon_i}$ is the partition
-function.  This discrepancy is revealing: the literature states that
-$\mu$ should depend upon the total protein $k$, whereas we predict
-that it should depend only upon the \textit{free} protein $p$.  This
-invites us to consider the relationship between $k$ and $p$, which by
-Eqs. (\ref{eq:mu_lnp},\ref{eq:mu_approx}) should be:
+Equation \ref{eq:mu_lnp} is especially interesting because it
+disagrees slightly with the established approximation given in
+\ref{eq:mu_approx}.  This discrepancy is revealing: the literature
+states that $\mu$ should depend upon the total protein $k$, whereas we
+predict that it should depend only upon the \textit{free} protein $p$.
+This invites us to consider the relationship between $k$ and $p$,
+which by Eqs. (\ref{eq:mu_lnp},\ref{eq:mu_approx}) should be:
 
 \begin{equation}
   \label{eq:p_vs_k}

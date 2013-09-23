@@ -57,6 +57,8 @@ results/fig/misclassification_rates.png: src/generate_misclassification_plot.py 
 	echo $(all_exact_mu_k_tables)
 	python src/generate_misclassification_plot.py results/fig/misclassification_rates.png
 
-paper_figs = results/fig/mu_k_figs/LexA_mu_k_
-pub/paper/paper.pdf: pub/paper/chem_pot_paper.tex pub/paper/bib/
-	pdflatex pub/paper/chem_pot_paper.tex pub/paper/chem_pot_paper.pdf
+paper_mu_k_figs = results/fig/mu_k_figs/LexA_mu_k_fig.png results/fig/mu_k_figs/Crp_mu_k_fig.png results/fig/mu_k_figs/FliA_mu_k_fig.png results/fig/mu_k_figs/Fur_mu_k_fig.png results/fig/mu_k_figs/OxyR_mu_k_fig.png
+paper_mu_mu_hat_figs = results/fig/mu_mu_hat_figs/LexA_mu_mu_hat_fig.png results/fig/mu_mu_hat_figs/Crp_mu_mu_hat_fig.png results/fig/mu_mu_hat_figs/FliA_mu_mu_hat_fig.png results/fig/mu_mu_hat_figs/Fur_mu_mu_hat_fig.png results/fig/mu_mu_hat_figs/OxyR_mu_mu_hat_fig.png
+paper_k_occupancy_figs = results/fig/k_occupancy_figs/LexA_k_occupancy_fig.png results/fig/k_occupancy_figs/Crp_k_occupancy_fig.png results/fig/k_occupancy_figs/FliA_k_occupancy_fig.png results/fig/k_occupancy_figs/Fur_k_occupancy_fig.png results/fig/k_occupancy_figs/OxyR_k_occupancy_fig.png
+pub/paper/paper.pdf: pub/paper/chem_pot_paper.tex pub/paper/bib/  $(paper_mu_k_figs)  $(paper_mu_mu_hat_figs)  $(paper_k_occupancy_figs)
+	cd pub/paper; pdflatex chem_pot_paper.tex
