@@ -1,8 +1,10 @@
 \documentclass{article}
-\usepackage{amsmath,graphicx,setspace,fullpage,subfigure}
+\usepackage{amsmath,graphicx,setspace,fullpage,subfigure,authblk}
 \begin{document}
-\title{What is the Chemical Potential of a Transcription Factor?}
-\author{Patrick O'Neill}
+\title{Heterogeneous Langmuir Kinetics Improves Self-Consistency of Transcription Factor Binding Models}
+\author[1]{Patrick O'Neill}
+\author[1]{Ivan Erill}
+\affil[1]{Department of Biological Sciences, UMBC}
 \maketitle{}
 \section{Introduction}
 
@@ -153,12 +155,12 @@ $\epsilon_s$ which summarizes the specific binding in both strands:
 
 If the binding site is asymmetric, then the contribution from one
 orientation (say, $\epsilon_f)$ will predominate since $\epsilon_f \ll
-\epsilon_b$, and so $\epsilon_s \approx epsilon_f$.  If the binding
+\epsilon_b$, and so $\epsilon_s \approx \epsilon_f$.  If the binding
 site is symmetric, however, then we will have $\epsilon_f \approx
 \epsilon_b$, and $\epsilon_s \approx \epsilon_f - \frac{\ln
   2}{\beta}$.  Intriguingly, subtracted term is precisely Landauer's
 limit, the minimum amount of energy required to erase one bit of
-information.  \cite{landauer61} It is suggestive to interpret this
+information  \cite{landauer61}. It is suggestive to interpret this
 difference as the gain in free energy obtained by neglecting to track
 the distinction between binding in the forward or reverse
 orientations, as is physiologically reasonable for the homomultimeric
@@ -170,36 +172,36 @@ Eq. \ref{eq:bindingenergy} for the site in 5'-3' orientation and
 $\epsilon_b$ for its reverse complement.
 
 \subsubsection{Non-specific binding}
-TFs bind DNA in specific and non-specific modes.  The existence of
-non-specific binding was predicted from theoretical considerations
-\cite{kaohuang77} and verified in many systems through a variety of
-experimental techniques \cite{revzin90}.  Given various estimates of
-non-specific binding of $-7\frac{\mathrm{kcal}}{\textrm{mol}}$ for Lac
-repressor \cite{wang77}, $-5.7\frac{\mathrm{kcal}}{\textrm{mol}}$ for
-MetJ \cite{augustus10}, and $-5$ to $-7
-\frac{\mathrm{kcal}}{\textrm{mol}}$ for CRP \cite{takahashi79},
-$-4\frac{\mathrm{kcal}}{\textrm{mol}}$ and $-4.2
-\frac{\mathrm{kcal}}{\textrm{mol}}$ respectively for $\lambda$ cI and
-Cro \cite{bakk2004}, a global value $\epsilon_{ns}$ on the order of
-$-5\frac{\mathrm{kcal}}{\textrm{mol}}\approx -8 k_BT$ at physiological
-temperatures is assumed hereafter.
+Transcription factors bind DNA in specific and non-specific modes.
+The existence of non-specific binding was predicted from theoretical
+considerations \cite{kaohuang77} and verified in many systems through
+a variety of experimental techniques \cite{revzin90}.  Given various
+estimates of non-specific binding of
+$-7\frac{\mathrm{kcal}}{\textrm{mol}}$ for Lac repressor
+\cite{wang77}, $-5.7\frac{\mathrm{kcal}}{\textrm{mol}}$ for MetJ
+\cite{augustus10}, and $-5$ to $-7 \frac{\mathrm{kcal}}{\textrm{mol}}$
+for CRP \cite{takahashi79}, $-4\frac{\mathrm{kcal}}{\textrm{mol}}$ and
+$-4.2 \frac{\mathrm{kcal}}{\textrm{mol}}$ respectively for $\lambda$
+cI and Cro \cite{bakk2004}, a global value $\epsilon_{ns}$ on the
+order of $-5\frac{\mathrm{kcal}}{\textrm{mol}}\approx -8 k_BT$ at
+physiological temperatures is assumed hereafter.
 
 The total free energy of binding for a site is then given by:
 \begin{equation}
   \epsilon = \frac{-\ln(e^{-\beta \epsilon_s} + e^{-\beta \epsilon_{ns}})}{\beta}.\label{eq:totalbindingenergy}
 \end{equation}
 
-  The total energy $\epsilon$ is essentially linear in $\epsilon_s$ for $\epsilon_s < \epsilon_{ns}$, and assumes the value $\epsilon_{ns}$ otherwise, in agreement with free energy profiles reported in \cite{maerkl2007}.
+  The total energy $\epsilon$ is effectively linear in $\epsilon_s$ for $\epsilon_s < \epsilon_{ns}$, and assumes the value $\epsilon_{ns}$ otherwise, in agreement with free energy profiles reported in \cite{maerkl2007}.
 
-A final complication arises from the fact that $\epsilon_{ns}$ is
-given in absolute terms, whereas values of $\epsilon_s$ are scaled so
-that the specific binding energy for the consensus sequence
-$\epsilon_s(s_0)$ is defined to be 0.  To reconcile the two scales, we
-assume that the contribution of the specific binding is on the order
-of $2k_BT w$, an optimal search criterion derived from first
-principles \cite{gerland02} and essentially in agreement with
-experimental data.  \cite{bakk2004}.
-\section{Site Occupancy Model}
+  A final complication arises from the fact that $\epsilon_{ns}$ is
+  given in absolute terms, whereas values of $\epsilon_s$ are offset
+  by an additive constant so that the specific binding energy for the
+  consensus sequence $\epsilon_s(s_0)$ is defined to be 0.  To
+  reconcile the two scales, we assume that the contribution of the
+  specific binding is on the order of $2k_BT w$, an optimal search
+  criterion derived from first principles \cite{gerland02} and
+  essentially in agreement with experimental data \cite{bakk2004}.
+\section{Deterministic Site Occupancy Model}
 For each site we will have a reaction of the form:
 \begin{equation}
   \label{eq:s_reaction}
@@ -240,7 +242,6 @@ root-finding methods.
 Lastly, Eq.\ref{eq:s_equilibrium} can be re-written using
 Eq. \ref{eq:kd} and the identity $p = e^{\ln p}$, ultimately yielding:
 \begin{equation}
-  \label{eq:s_fd}
   s_i = \frac{1}{1 + e^{\frac{\Delta G}{k_BT}  - \ln p}},
 \end{equation}
 which takes the form of the Fermi-Dirac distribution:
@@ -286,11 +287,111 @@ all, having no free sites to bind to, and should contribute almost
 entirely to the quantity of unbound protein. This limiting case
 contradicts the approximation, which predicts $\frac{dp}{dk}\approx
 \frac{1}{Z}$.  The relevance of this discrepancy will depend on the
-behavior of the model in the physiologically realistic ``meso-copy''
-regime, roughly $10^1 < k < 10^3$ \cite{ishihama08}.  In the next section we explore the
-model's behavior for various copy numbers and genomic background
-settings.
+behavior of the model in the physiologically realistic copy-number
+regime, roughly $10^1 < k < 10^3$ \cite{ishihama08}.  
 
+\section{Stochastic Site Occupancy Model}
+In the previous section we presented a deterministic ODE model for the
+time-evolution of the occupancy of each binding site.  Such a model
+assumes that the copy number of the TF is large enough to justify mass
+action kinetics.  Since this assumption may not always hold \textit{in
+  vivo}, we consider in this section a stochastic model derived from
+the chemical master equation for the heterogeneous Langmuir process.
+
+Consider a system with $G$ binding sites and $k$ TF copies, having a
+collection of states $X = \{x \in \{0,1\}^G | |x| \leq k\}$, where
+$|x| = |x|_0$.  One may interpret $x$ as the state of the chromosome
+in which a TF copy is bound at position $i$ iff $x_i = 1$, and $f(x) =
+k - |x|$ copies of the TF are unbound in the cytosol.  Assuming some
+fixed ordering on the set of states, the chemical master equation is
+then:
+
+\begin{equation}
+  \label{eq:cme}
+  \dot P(t) = A P(t)
+\end{equation}
+
+where $A_{yx} =
+\begin{cases}
+  f(y) k_i^+ & y \overset{i}{\rightarrow} x\\
+  1 & y \overset{-i}{\rightarrow} x \\
+  0 & \textrm{otherwise}
+\end{cases}
+$
+
+and $y \overset{i}{\rightarrow} x$ (respectively, $y
+\overset{-i}{\rightarrow} x$) denotes the relation that state $x$
+is accessible from state $y$ through a binding (unbinding) event at
+site $i$.  
+
+The probability that site $s_i$ is bound in the limit
+of infinite time is given by:
+
+\begin{equation}
+\label{eq:marginal}
+ \sum_{x\in X}P^*(x)[x_i = 1],
+\end{equation}
+where $P^*$ is the stationary distribution associated with Eq. \ref{eq:cme}.  
+
+Given a vector $\mathbf{k}$ of forward binding constants, define
+$\mathbf{k}^x$ as $\prod_{i=1}^Gk_i^{x_i}$.  If
+$y\overset{i}\rightarrow x$, then the condition of detailed balance
+implies that the equation:
+
+\begin{equation}
+\label{eq:detailed_balance}
+P^*(y) f(y)k^+_i = P^*(x)
+\end{equation}
+holds for each pair of related states $y$ and $x$.  Define for convenience:
+
+\begin{equation}
+  \label{eq:q}
+  Q(x) = (k^{\b{${|x|}$}})\mathbf{k}^x
+\end{equation}
+where $n^{\b{$m$}}$ is the falling factorial in Knuth notation.
+Together, the equations described in \ref{eq:detailed_balance} imply:
+
+\begin{equation}
+  \label{eq:stationary_probability}
+  P^*(x)=\frac{Q(x)}{\sum_{x'\in X}Q(x')}.
+\end{equation}
+
+Finally, combining Eqs. \ref{eq:stationary_probability}
+and \ref{eq:marginal}, we obtain:
+\begin{equation}
+  \label{eq:stochastic_occupancy}
+  P(s_i) = \frac{\sum_{x\in X}Q(x)[x_i = 1]}{\sum_{x\in X}Q(x)}
+\end{equation}
+by marginalizing over all states in which $s_i$ is bound.
+% P^*(x)=\frac{\sum_{x\in X |  (k)_{\sum x}\mathbf{k}^x}
+
+\subsection{Derivation of the chemical potential}
+
+In the last section we saw that the occupancy for an arbitrary site
+could be computed exactly from the chemical master equation.  It is
+not obvious, however, what relationship this expression bears to the
+deterministic form found in Eq. \ref{eq:s_fd}.  In this section we
+explore this question.
+
+Instead of writing $P(s_i)$ explicitly as:
+
+\begin{equation}
+  \label{eq:explicit}
+  P(s_i) = \frac{k_ip + k_ik_1p(p-1) + k_ik_2p(p-1) + \ldots + k_ik_Gp(p-1) + \ldots + (k_ik_1k_2\ldots k_{(p-1)})p! + \ldots (k_ik_{G-p+2}k_{G-p+3}\ldots k_{G})p!}{1 + k_1p + k_2p + \ldots k_Gp + \ldots + (k_1k_2\ldots k_{p})p! + \ldots (k_{G-p+1}k_{G-p+2}\ldots k_{G})p!}
+\end{equation}
+let us write it as:
+\begin{align*}
+\label{eq:implicit}
+P(s_i) =& \frac{\{s_i\ \mathrm{terms}\}}{\{\mathrm{all\ terms} \}}\\
+P(s_i) =& \frac{\{s_i\ \mathrm{terms}\}}{\{s_i\ \mathrm{terms}\} + \{\mathrm{non}\text{--}s_i\ \mathrm{terms}\}}\\
+P(s_i) =& \frac{1}{1 + \frac{\{\mathrm{non}\text{--}s_i\ \mathrm{terms}\}}{\{s_i\ \mathrm{terms}\}}}.
+\end{align*}
+
+Now each term either contains 
+
+
+In the next section we explore the model's behavior for
+various copy numbers and genomic background settings.
 \section{Data and Methods}
 Experiments concerning \textit{E. coli} TFs were conducted on the
 \textit{Escherichia coli} K12 MG1655 genome \cite{blattner97} or on
@@ -315,7 +416,7 @@ All code was implemented in Python and is available at
 \texttt{github.com/poneill/chemical\_potential}.  In particular, the
 relationship between copy number and chemical potential for a given
 genomic binding energy landscape was determined by summing
-\cite{eq:s_fd} over all $\epsilon_i$ for a given value of $\mu$, which
+\ref{eq:s_fd} over all $\epsilon_i$ for a given value of $\mu$, which
 requires approximately four seconds of wall-clock time on a moderately
 endowed desktop computer.  To compute the value of $\mu$ corresponding
 to a given $k$, the previous technique generalizes to a bisection
@@ -377,10 +478,10 @@ on the order of $\sim 5k_BT$, as in the case of LexA?
 
 \begin{figure}[ht]
   \centering
-  \subfigure{\includegraphics[scale=0.3]{../../results/fig/mu_k_figs/LexA_mu_k_fig.png}}
-  \subfigure{\includegraphics[scale=0.3]{../../results/fig/mu_k_figs/LexA_mu_k_fig.png}}
-\subfigure{\includegraphics[scale=0.3]{../../results/fig/mu_k_figs/LexA_mu_k_fig.png}}
-\subfigure{\includegraphics[scale=0.3]{../../results/fig/mu_k_figs/LexA_mu_k_fig.png}}
+  \subfigure{\includegraphics[scale=0.3]{../../results/fig/mu_k_figs/Crp_mu_k_fig.png}}
+  \subfigure{\includegraphics[scale=0.3]{../../results/fig/mu_k_figs/FliA_mu_k_fig.png}}
+\subfigure{\includegraphics[scale=0.3]{../../results/fig/mu_k_figs/Fur_mu_k_fig.png}}
+\subfigure{\includegraphics[scale=0.3]{../../results/fig/mu_k_figs/OxyR_mu_k_fig.png}}
   \caption{$\mu$-$k$ diagrams for a variety of \textit{E. coli} TFs}
   \label{fig:mu_vs_k_examples}
 \end{figure}
@@ -440,7 +541,7 @@ copies of the TF for each true binding site.
 
   \begin{figure}[ht]
     \centering
-    \includegraphics[scale=0.3]{../../results/fig/k_occupancy_figs/LexA_mu_k_fig.png}
+    \includegraphics[scale=0.3]{../../results/fig/k_occupancy_figs/LexA_k_occupancy_fig.png}
     \caption{Aggregate binding site occupancy as a function of copy number}
     \label{fig:occupancy_vs_copy_number}
   \end{figure}
@@ -464,7 +565,8 @@ sites were compared to predicted occupancy for $\mu$ and $\hat\mu$ and
 Pearson correlation coefficients were computed at various copy
 numbers.
 
-Results are shown in Fig. \ref{fig:smollett_chip_seq}.  When the
+Results are shown in Fig. % \ref{fig:smollett_chip_seq}.
+When the
 chemical potential is computed exactly, correlation is maximized for
 copy number in the physiological range, whereas use of the
 approximated chemical potential leads to predictions which lag by more
@@ -473,12 +575,12 @@ sharper given the exact solution, in accordance with the previous
 result.
 
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[scale=0.8]{../../results/smollett_figs/smollett_fig.png}
-  \caption{Correlation of LexA Chip-Seq binding intensities with occupancy predictions for exact and approximated chemical potentials}
-  \label{fig:smollett_chip_seq}
-\end{figure}
+% \begin{figure}[ht]
+%   \centering
+%   \includegraphics[scale=0.8]{results/smollett_figs/smollett_fig.png}
+%   \caption{Correlation of LexA Chip-Seq binding intensities with occupancy predictions for exact and approximated chemical potentials}
+%   \label{fig:smollett_chip_seq}
+% \end{figure}
 
 \subsection{Summary}
 The use of the ideal gas approximation for the computation of the
@@ -508,6 +610,6 @@ agreement with an exact rather than approximated value.
 
 
  \newpage
-\bibliography{/home/poneill/Dropbox/bibliography}{}
+\bibliography{bib/bibliography}{}
 \bibliographystyle{abbrv} \newpage
 \end{document}
