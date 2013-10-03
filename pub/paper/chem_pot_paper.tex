@@ -1,4 +1,6 @@
 \documentclass{article}
+\newif\ifatlab
+%\atlabtrue %uncomment to include figures
 \usepackage{amsmath,graphicx,setspace,fullpage,subfigure,authblk}
 \begin{document}
 \title{Heterogeneous Langmuir Kinetics Improves Self-Consistency of Transcription Factor Binding Models}
@@ -10,11 +12,11 @@
 
 \doublespacing Transcriptional regulation is the most ubiquitous and
 efficient mechanism for control of gene expression in biological
-systems.  Despite the prevalence and importance of this topic, many
-fundamental questions regarding the physiology and evolution of
-transcriptional regulatory systems remain open.  Although several
-specific systems have been studied in great detail
-(\textit{e.g.} \textit{lac},\textit{ara},$\lambda$)\cite{riggs70},\cite{hamilton88},\cite{ptashne67}
+systems.  Despite its centrality in biology, many fundamental
+questions regarding the physiology and evolution of transcriptional
+regulatory systems remain open.  Although several specific systems
+have been studied in great detail (\textit{e.g.}
+\textit{lac},\textit{ara},$\lambda$)\cite{riggs70},\cite{hamilton88},\cite{ptashne67}
 within bacterial models, the overwhelming number of distinct
 transcription factors (TFs) present within a typical bacterial cell
 ($\sim 200$) motivates the search for models of transcriptional
@@ -28,8 +30,10 @@ the other corresponding to the set of functional binding sites.  Given
 a putative site, one may compute the log-odds ratio for the components
 of the mixtures and interpret the biological function of the site in
 relation to the probability of the site belonging to the binding site
-component.  Such models usually suffer from a high number of false
-positives \cite{erill09}.  In the thermodynamic approach, one models
+component of the mixture model.  Such models usually suffer from a
+high number of false positives \cite{erill09}, and offer little
+quantitative insight into the strength of the interaction between the
+TF and the regulated gene.  In the thermodynamic approach, one models
 the TF as a function from nucleotide sequences to free energies of
 binding.  ``Good'' functions are those which separate true sites from
 the genomic background, assigning lower free energies of binding to
@@ -58,21 +62,42 @@ system.  Typically, it is approximated by the chemical potential for an ideal ga
   \label{eq:mu_approx}
   \hat{\mu} \approx k_BT (\ln k - \ln Z),
 \end{equation}
-given for example in \cite{gerland02} and (slightly modified) in
-\cite{zhao09},where $Z=\sum_ie^{-\beta\epsilon_i}$ is the partition
-function.  (Throughout, we will use $\hat\mu$ to refer to the ideal
-gas approximation of a system's chemical potential, and reserve $\mu$
-for exact chemical potentials).
+where $Z=\sum_ie^{-\beta\epsilon_i}$ is the partition function.  This
+approximation is ubiquitous in the literature, given for example in
+\cite{gerland02} and (slightly modified) in \cite{zhao09}.
+Throughout, we will use $\hat\mu$ to refer to the ideal gas
+approximation of a system's chemical potential, and reserve $\mu$ for
+exact chemical potentials.
 
-In this study, we propose to address two common assumptions made in
-most existing models of TF-DNA interaction.  The first assumption that
-the copy number is small, in a sense that will be clarified below.
-The second assumption is that the genomic background is
-well-approximated by a mononucleotide model.  Both assumptions were
-originally granted for the purposes of analytical tractability, but in
-an era of ubiquitous sequence data and cheap computing power it has
-become possible to re-examine these simplifications and compare their
-theoretical entailments to the available data.
+In this study, we pose two questions.  Firstly, is the ideal gas
+approximation justifiable for typical prokaryotic transcriptional
+regulatory systems, or does it lead to results which cannot be
+reconciled with existing evidence and theory?  Secondly, what are the
+mathematical consequences of modeling binding occupancies with
+deterministic rather than stochastic methods?  We answer the first
+question by computing exact chemical potentials for a variety of
+transcription factors in \textit{Escherichia coli} and comparing the
+resulting occupancy distributions to those given by the respective
+approximate potentials, showing that the exact chemical potential
+improves the self-consistency of the TF model, in the sense of
+predicting higher occupancies for experimentally validated sites at
+physiologically relevant TF concentrations.  We address the second
+question by considering genome-scale transcription factor binding
+dynamics with arbitrary copy number as a stochastic process, deriving
+an expression for the expected equilibrium occupancy of a given site
+and comparing it to the corresponding deterministic form.  [XXX Since
+this model is non-linear, it is a non-trivial result that its
+equilibrium steady state is well-approximated by the deterministic
+model...]
+
+% The first assumption that
+% the copy number is small, in a sense that will be clarified below.
+% The second assumption is that the genomic background is
+% well-approximated by a mononucleotide model.  Both assumptions were
+% originally granted for the purposes of analytical tractability, but in
+% an era of ubiquitous sequence data and cheap computing power it has
+% become possible to re-examine these simplifications and compare their
+% theoretical entailments to the available data.
 
 \section{Binding Energy Model}
 \subsection{Overview}
@@ -100,7 +125,7 @@ probabilities of occupancy are not extremely co-localized in the
 chromosome, however, interference between neighboring sites can be
 neglected.  We therefore assume that the binding state of one site
 does not affect the occupancy of any other state, either through
-steric exclusion or cooperative binding.
+cooperative binding or steric exclusion.
 
 
 \subsection{Inference of binding energies from sequence data}
@@ -158,10 +183,10 @@ that TFs may bind either specifically or non-specifically.
 
 \subsubsection{Strandedness}
 Double-stranded DNA may be bound by a TF in either of two
-orientations, which we will refer to as the \textit{forward} and
-\textit{backward} orientations.  Since binding in the two orientations
-is mutually exclusive and jointly exhaustive given the binding event,
-we may write the occupancy of the site as:
+orientations, which we will refer to arbitrarily as the
+\textit{forward} and \textit{backward} orientations.  Since binding in
+the two orientations is mutually exclusive and jointly exhaustive
+given the binding event, we may write the occupancy of the site as:
 \begin{equation}
 P(s) = P(s_f) + P(s_b)
 \end{equation}
@@ -181,12 +206,12 @@ orientation (say, $\epsilon_f)$ will predominate since $\epsilon_f \ll
 \epsilon_b$, and so $\epsilon_s \approx \epsilon_f$.  If the binding
 site is symmetric, however, then we will have $\epsilon_f \approx
 \epsilon_b$, and $\epsilon_s \approx \epsilon_f - \frac{\ln
-  2}{\beta}$.  Intriguingly, subtracted term is precisely Landauer's
+  2}{\beta}$.  Intriguingly, the subtracted term is precisely Landauer's
 limit, the minimum amount of energy required to erase one bit of
 information  \cite{landauer61}. It is suggestive to interpret this
 difference as the gain in free energy obtained by neglecting to track
 the distinction between binding in the forward or reverse
-orientations, as is physiologically reasonable for the homomultimeric
+orientations, as is physiologically reasonable for the homodimeric
 proteins which constitute the majority of prokaryotic transcription
 factors.  Throughout, we will consider the free energy of specific
 binding to a given site to be determined by
@@ -220,10 +245,11 @@ The total free energy of binding for a site is then given by:
   given in absolute terms, whereas values of $\epsilon_s$ are offset
   by an additive constant so that the specific binding energy for the
   consensus sequence $\epsilon_s(s_0)$ is defined to be 0.  To
-  reconcile the two scales, we assume that the contribution of the
-  specific binding is on the order of $2k_BT w$, an optimal search
-  criterion derived from first principles \cite{gerland02} and
-  essentially in agreement with experimental data \cite{bakk2004}.
+  reconcile the two scales, we assume that the free energy of binding
+  for the consensus sequence is on the order of $2wk_BT$, a quantity
+  derived from first principles through optimal search considerations
+  \cite{gerland02} and essentially in agreement with experimental data
+  \cite{bakk2004}.
 \section{Deterministic Site Occupancy Model}
 For each site we will have a reaction of the form:
 \begin{equation}
@@ -315,12 +341,13 @@ action kinetics.  Since this assumption may not always hold \textit{in
 the chemical master equation for the heterogeneous Langmuir process.
 
 Consider a system with $G$ binding sites and $k$ TF copies, having a
-collection of states $X = \{x \in \{0,1\}^G | |x| \leq k\}$, where
-$|x| = |x|_0$.  One may interpret $x$ as the state of the chromosome
-in which a TF copy is bound at position $i$ iff $x_i = 1$, and $f(x) =
-k - |x|$ copies of the TF are unbound in the cytosol.  Assuming some
-fixed ordering on the set of states, the chemical master equation is
-then:
+collection of states $X = \left\{x \in \{0,1\}^G \middle| ||x|| \leq
+  k\right\}$.  One may interpret $x$ as the state of the chromosome in
+which a TF copy is bound at position $i$ iff $x_i = 1$, and $f(x) = k
+- ||x||$ copies of the TF are unbound in the cytosol (mnemonically,
+$f(x)$ is the quantity of \textit{free} protein in state $x$).
+Assuming some fixed ordering on the set of states, the chemical master
+equation is then:
 
 \begin{equation}
   \label{eq:cme}
@@ -340,8 +367,7 @@ and $y \overset{i}{\rightarrow} x$ (respectively, $y
 is accessible from state $y$ through a binding (unbinding) event at
 site $i$.  
 
-The probability that site $s_i$ is bound in the limit
-of infinite time is given by:
+The equilibrium probability that site $s_i$ is bound is given by:
 
 \begin{equation}
 \label{eq:marginal}
@@ -356,15 +382,15 @@ implies that the equation:
 
 \begin{equation}
 \label{eq:detailed_balance}
-P^*(y) f(y)k^+_i = P^*(x)
+P^*(y) f(y)k^+_i = P^*(x)\cdot 1
 \end{equation}
 holds for each pair of related states $y$ and $x$.  Define for convenience:
 
 \begin{equation}
   \label{eq:q}
-  Q(x) = (k^{\b{${|x|}$}})\mathbf{k}^x
+  Q(x) = (f(x)^{\b{${||x||}$}})\mathbf{k}^x
 \end{equation}
-where $n^{\b{$m$}}$ is the falling factorial in Knuth notation.
+where $n^{\b{$m$}} = n(n-1)\ldots(n-m+1)$ is the falling factorial in Knuth notation.
 Together, the equations described in \ref{eq:detailed_balance} imply:
 
 \begin{equation}
@@ -376,10 +402,11 @@ Finally, combining Eqs. \ref{eq:stationary_probability}
 and \ref{eq:marginal}, we obtain:
 \begin{equation}
   \label{eq:stochastic_occupancy}
-  P(s_i) = \frac{\sum_{x\in X}Q(x)[x_i = 1]}{\sum_{x\in X}Q(x)}
+  P(s_i) = \frac{\sum_{x\in X}Q(x)[x_i = 1]}{\sum_{x'\in X}Q(x')}
 \end{equation}
-by marginalizing over all states in which $s_i$ is bound.
+by summing over all states in which $s_i$ is bound.
 % P^*(x)=\frac{\sum_{x\in X |  (k)_{\sum x}\mathbf{k}^x}
+
 
 \subsection{Derivation of the chemical potential}
 
@@ -389,21 +416,20 @@ not obvious, however, what relationship this expression bears to the
 deterministic form found in Eq. \ref{eq:s_fd}.  In this section we
 explore this question.
 
-Instead of writing $P(s_i)$ explicitly as:
+We can write $P(s_i)$ explicitly as:
 
-\begin{equation}
-  \label{eq:explicit}
-  P(s_i) = \frac{k_ip + k_ik_1p(p-1) + k_ik_2p(p-1) + \ldots + k_ik_Gp(p-1) + \ldots + (k_ik_1k_2\ldots k_{(p-1)})p! + \ldots (k_ik_{G-p+2}k_{G-p+3}\ldots k_{G})p!}{1 + k_1p + k_2p + \ldots k_Gp + \ldots + (k_1k_2\ldots k_{p})p! + \ldots (k_{G-p+1}k_{G-p+2}\ldots k_{G})p!}
-\end{equation}
-let us write it as:
 \begin{align*}
-\label{eq:implicit}
-P(s_i) =& \frac{\{s_i\ \mathrm{terms}\}}{\{\mathrm{all\ terms} \}}\\
-P(s_i) =& \frac{\{s_i\ \mathrm{terms}\}}{\{s_i\ \mathrm{terms}\} + \{\mathrm{non}\text{--}s_i\ \mathrm{terms}\}}\\
-P(s_i) =& \frac{1}{1 + \frac{\{\mathrm{non}\text{--}s_i\ \mathrm{terms}\}}{\{s_i\ \mathrm{terms}\}}}.
+  P(s_i) =& \frac{\sum_{x\in X}Q(x)[x_i = 1]}{\sum_{x'\in X}Q(x')}\\ 
+=& \frac{k_ip + k_ik_1p(p-1) + k_ik_2p(p-1) + \ldots + k_ik_Gp(p-1) + \ldots + (k_ik_1k_2\ldots k_{(p-1)})p! + \ldots (k_ik_{G-p+2}k_{G-p+3}\ldots k_{G})p!}{1 + k_1p + k_2p + \ldots k_Gp + \ldots + (k_1k_2\ldots k_{p})p! + \ldots (k_{G-p+1}k_{G-p+2}\ldots k_{G})p!}.
 \end{align*}
+% let us write it as:
+% \begin{align*}
+% P(s_i) =& \frac{\{s_i\ \mathrm{terms}\}}{\{\mathrm{all\ terms} \}}\\
+% P(s_i) =& \frac{\{s_i\ \mathrm{terms}\}}{\{s_i\ \mathrm{terms}\} + \{\mathrm{non}\text{--}s_i\ \mathrm{terms}\}}\\
+% P(s_i) =& \frac{1}{1 + \frac{\{\mathrm{non}\text{--}s_i\ \mathrm{terms}\}}{\{s_i\ \mathrm{terms}\}}}.
+% \end{align*}
 
-Now each term either contains 
+% Now each term either contains 
 
 
 In the next section we explore the model's behavior for
@@ -483,7 +509,9 @@ on the order of $\sim 5k_BT$, as in the case of LexA?
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[scale=0.8]{../../results/fig/mu_k_figs/LexA_mu_k_fig.png}
+\ifatlab
+\includegraphics[scale=0.8]{../../results/fig/mu_k_figs/LexA_mu_k_fig.png}
+\fi
   \caption{Chemical potential for LexA as a function of copy number.
     The exact solution ($\mu$) is compared to the approximation($\hat\mu$) on both the
     \textit{E. coli} genome and a random control genome.}
@@ -494,10 +522,12 @@ on the order of $\sim 5k_BT$, as in the case of LexA?
 
 \begin{figure}[ht]
   \centering
+  \ifatlab{}
   \subfigure{\includegraphics[scale=0.3]{../../results/fig/mu_k_figs/Crp_mu_k_fig.png}}
   \subfigure{\includegraphics[scale=0.3]{../../results/fig/mu_k_figs/FliA_mu_k_fig.png}}
 \subfigure{\includegraphics[scale=0.3]{../../results/fig/mu_k_figs/Fur_mu_k_fig.png}}
 \subfigure{\includegraphics[scale=0.3]{../../results/fig/mu_k_figs/OxyR_mu_k_fig.png}}
+\fi
   \caption{$\mu$-$k$ diagrams for a variety of \textit{E. coli} TFs}
   \label{fig:mu_vs_k_examples}
 \end{figure}
@@ -509,7 +539,9 @@ copies of the TF for each true binding site.
 
   \begin{figure}[ht]
     \centering
+    \ifatlab
 \includegraphics[scale=0.3]{../../results/fig/mu_mu_hat_figs/LexA_mu_mu_hat_fig.png}
+\fi
     \caption{Binding probabilities for LexA binding sites given exact solution ($\mu$) and approximate solution ($\hat\mu$)}
     \label{fig:LexA_site_killing_exp}
   \end{figure}
@@ -557,17 +589,21 @@ copies of the TF for each true binding site.
 
   \begin{figure}[ht]
     \centering
+    \ifatlab
     \includegraphics[scale=0.3]{../../results/fig/k_occupancy_figs/LexA_k_occupancy_fig.png}
+    \fi
     \caption{Aggregate binding site occupancy as a function of copy number}
     \label{fig:occupancy_vs_copy_number}
   \end{figure}
 
   \begin{figure}[ht]
   \centering
+  \ifatlab
 \subfigure{\includegraphics[scale=0.3]{../../results/fig/k_occupancy_figs/Crp_k_occupancy_fig.png}}
 \subfigure{\includegraphics[scale=0.3]{../../results/fig/k_occupancy_figs/FliA_k_occupancy_fig.png}}
 \subfigure{\includegraphics[scale=0.3]{../../results/fig/k_occupancy_figs/Fur_k_occupancy_fig.png}}
 \subfigure{\includegraphics[scale=0.3]{../../results/fig/k_occupancy_figs/OxyR_k_occupancy_fig.png}}
+\fi
   \caption{Occupancy/copy number diagrams for a variety of \textit{E. coli} TFs}
   \label{fig:occupancy_vs_copy_number_examples}
 \end{figure}
